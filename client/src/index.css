@@ -1,0 +1,131 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap');
+
+:root {
+  --teal: #0a7c6e;
+  --teal-light: #13a594;
+  --teal-pale: #e6f4f2;
+  --accent: #e85d26;
+  --accent-soft: #fdf0ea;
+  --navy: #0d1b2a;
+  --slate: #3d5166;
+  --mist: #f0f5f7;
+  --white: #ffffff;
+  --border: #d4e4e2;
+  --shadow: 0 4px 24px rgba(10, 124, 110, 0.08);
+  --shadow-heavy: 0 8px 40px rgba(10, 124, 110, 0.15);
+  --radius: 14px;
+  --radius-sm: 8px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--mist);
+  color: var(--navy);
+  line-height: 1.6;
+  font-size: 15px;
+}
+
+h1, h2, h3, h4 {
+  font-family: 'Playfair Display', serif;
+  line-height: 1.25;
+}
+
+button {
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+}
+
+input, textarea, select {
+  font-family: 'DM Sans', sans-serif;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--mist);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--teal-light);
+  border-radius: 3px;
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.8); }
+}
+
+@keyframes bounce {
+  0%, 60%, 100% { transform: translateY(0); }
+  30% { transform: translateY(-6px); }
+}
+
+/* Icon layout helpers */
+.btn-primary, .btn-secondary, .submit-btn, .nav-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.ai-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.error-msg {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.footer-links ul li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tech-stack {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.success-icon {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+/* Spin for loader */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+.spin {
+  animation: spin 0.8s linear infinite;
+}

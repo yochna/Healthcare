@@ -1,0 +1,140 @@
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: rgba(240, 245, 247, 0.85);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid transparent;
+  transition: all 0.3s ease;
+  height: 72px;
+}
+
+.navbar.scrolled {
+  background: rgba(255, 255, 255, 0.95);
+  border-bottom-color: var(--border);
+  box-shadow: 0 2px 20px rgba(10, 124, 110, 0.08);
+}
+
+.nav-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.brand-icon {
+  font-size: 22px;
+}
+
+.brand-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--navy);
+  letter-spacing: -0.3px;
+}
+
+.brand-name span {
+  color: var(--teal);
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  list-style: none;
+}
+
+.nav-btn {
+  background: none;
+  border: none;
+  padding: 8px 14px;
+  color: var(--slate);
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: var(--radius-sm);
+  transition: all 0.2s;
+}
+
+.nav-btn:hover {
+  color: var(--teal);
+  background: var(--teal-pale);
+}
+
+.nav-btn.active {
+  color: var(--teal);
+  background: var(--teal-pale);
+  font-weight: 600;
+}
+
+.nav-cta {
+  background: var(--teal);
+  color: white;
+  border: none;
+  padding: 9px 20px;
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 600;
+  margin-left: 8px;
+  transition: all 0.2s;
+}
+
+.nav-cta:hover {
+  background: var(--teal-light);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(10, 124, 110, 0.3);
+}
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  padding: 4px;
+}
+
+.hamburger span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--navy);
+  border-radius: 2px;
+  transition: all 0.2s;
+}
+
+@media (max-width: 768px) {
+  .hamburger { display: flex; }
+  
+  .nav-links {
+    display: none;
+    position: fixed;
+    top: 72px;
+    left: 0;
+    right: 0;
+    background: white;
+    flex-direction: column;
+    padding: 16px;
+    border-bottom: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    gap: 4px;
+  }
+  
+  .nav-links.open { display: flex; }
+  .nav-links li { width: 100%; }
+  .nav-btn, .nav-cta { width: 100%; text-align: center; }
+  .nav-cta { margin-left: 0; }
+}

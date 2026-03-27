@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: healthbridge-api
+    env: node
+    rootDir: server
+    buildCommand: npm install
+    startCommand: node index.js
+    envVars:
+      - key: MONGO_URI
+        sync: false
+      - key: CLIENT_URL
+        value: https://your-frontend.vercel.app
+      - key: NODE_ENV
+        value: production
