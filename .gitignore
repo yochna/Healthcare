@@ -16,3 +16,4 @@ api/.env
 .DS_Store
 *.log
 .vscode/
+server/.env.example
