@@ -5,7 +5,7 @@ A full-stack healthcare support platform for NGOs, built with React, Node.js, Ex
 ---
 
 ## 🚀 Live Demo
-> Deploy to Render/Vercel and paste your link here.
+> healthcare-sigma-eight.vercel.app
 
 ## 📁 Tech Stack
 
