@@ -1,36 +1,40 @@
 import React, { useState } from 'react';
 import { Mail, CheckCircle, Zap, Phone, MapPin, Loader, AlertTriangle } from 'lucide-react';
+import { useForm } from '../hooks/useForm';
 import './Form.css';
 
-const API = process.env.REACT_APP_API_URL || '';
+
 
 const initialState = { name: '', email: '', subject: '', message: '' };
 
 const ContactForm = () => {
-  const [form, setForm] = useState(initialState);
-  const [status, setStatus] = useState(null);
-  const [autoReply, setAutoReply] = useState('');
+  // const [form, setForm] = useState(initialState);
+  // const [status, setStatus] = useState(null);
+  // const [autoReply, setAutoReply] = useState('');
 
-  const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
+  // const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
 
-  const handleSubmit = async e => {
-    e.preventDefault();
-    setStatus('loading');
-    try {
-      const res = await fetch(`${API}/api/contacts`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form)
-      });
-      const data = await res.json();
-      setAutoReply(data.autoReply);
-      setStatus('success');
-      setForm(initialState);
-    } catch {
-      setStatus('error');
-    }
-  };
+  // const handleSubmit = async e => {
+  //   e.preventDefault();
+  //   setStatus('loading');
+  //   try {
+  //     const res = await fetch(`${API}/api/contacts`, {
+  //       method: 'POST',
+  //       headers: { 'Content-Type': 'application/json' },
+  //       body: JSON.stringify(form)
+  //     });
+  //     const data = await res.json();
+  //     setAutoReply(data.autoReply);
+  //     setStatus('success');
+  //     setForm(initialState);
+  //   } catch {
+  //     setStatus('error');
+  //   }
+  // };
 
+
+   const { form, status, result, handleChange, handleSubmit, resetForm } = 
+    useForm(initialState, '/api/contacts');
   if (status === 'success') {
     return (
       <div className="form-page">
@@ -40,9 +44,9 @@ const ContactForm = () => {
           <p>We've received your message. Here's your AI-generated auto-response:</p>
           <div className="ai-summary">
             <div className="ai-label"><Zap size={13} /> Auto-Response from HealthBridge</div>
-            <p>{autoReply}</p>
+          <p>{result?.autoReply || 'Thank you for reaching out!'}</p>
           </div>
-          <button className="btn-primary" onClick={() => setStatus(null)}>Send Another Message</button>
+          <button className="btn-primary" onClick={resetForm}>Send Another Message</button>
         </div>
       </div>
     );

@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Stethoscope, CheckCircle, Bot, AlertTriangle, Loader } from 'lucide-react';
+import { useForm } from '../hooks/useForm';
 import './Form.css';
 
-const API = process.env.REACT_APP_API_URL || '';
+// const API = process.env.REACT_APP_API_URL || '';
 
 const initialState = {
   name: '', age: '', email: '', phone: '',
@@ -17,29 +18,30 @@ const urgencyConfig = {
 };
 
 const PatientForm = () => {
-  const [form, setForm] = useState(initialState);
-  const [status, setStatus] = useState(null);
-  const [result, setResult] = useState(null);
+  // const [form, setForm] = useState(initialState);
+  // const [status, setStatus] = useState(null);
+  // const [result, setResult] = useState(null);
+  const {form,status,result,handleChange,handleSubmit,resetForm} = useForm(initialState,'/api/patients');
 
-  const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
+  // const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
 
-  const handleSubmit = async e => {
-    e.preventDefault();
-    setStatus('loading');
-    try {
-      const res = await fetch(`${API}/api/patients`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form)
-      });
-      const data = await res.json();
-      setResult(data);
-      setStatus('success');
-      setForm(initialState);
-    } catch {
-      setStatus('error');
-    }
-  };
+  // const handleSubmit = async e => {
+  //   e.preventDefault();
+  //   setStatus('loading');
+  //   try {
+  //     const res = await fetch(`${API}/api/patients`, {
+  //       method: 'POST',
+  //       headers: { 'Content-Type': 'application/json' },
+  //       body: JSON.stringify(form)
+  //     });
+  //     const data = await res.json();
+  //     setResult(data);
+  //     setStatus('success');
+  //     setForm(initialState);
+  //   } catch {
+  //     setStatus('error');
+  //   }
+  // };
 
   if (status === 'success') {
     return (
@@ -52,7 +54,7 @@ const PatientForm = () => {
             <div className="ai-label"><Bot size={13} /> AI Case Summary</div>
             <p>{result?.aiSummary}</p>
           </div>
-          <button className="btn-primary" onClick={() => setStatus(null)}>Submit Another Request</button>
+          <button className="btn-primary" onClick={resetForm}>Submit Another Request</button>
         </div>
       </div>
     );

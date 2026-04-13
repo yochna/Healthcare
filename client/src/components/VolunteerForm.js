@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { HeartHandshake, CheckCircle, ClipboardList, Loader, AlertTriangle } from 'lucide-react';
+import { useForm } from '../hooks/useForm';
 import './Form.css';
 
-const API = process.env.REACT_APP_API_URL || '';
+
 
 const skillOptions = [
   'Medical/Nursing', 'Counseling', 'Logistics & Transport',
@@ -16,10 +17,12 @@ const initialState = {
 };
 
 const VolunteerForm = () => {
-  const [form, setForm] = useState(initialState);
-  const [status, setStatus] = useState(null);
+  // const [form, setForm] = useState(initialState);
+  // const [status, setStatus] = useState(null);
 
-  const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
+  const {form ,setForm,status,handleChange,handleSubmit,resetForm} = useForm(initialState,'/api/volunteers')
+
+  // const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
 
   const toggleSkill = skill => {
     setForm(f => ({
@@ -30,21 +33,21 @@ const VolunteerForm = () => {
     }));
   };
 
-  const handleSubmit = async e => {
-    e.preventDefault();
-    setStatus('loading');
-    try {
-      await fetch(`${API}/api/volunteers`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form)
-      });
-      setStatus('success');
-      setForm(initialState);
-    } catch {
-      setStatus('error');
-    }
-  };
+  // const handleSubmit = async e => {
+  //   e.preventDefault();
+  //   setStatus('loading');
+  //   try {
+  //     await fetch(`${API}/api/volunteers`, {
+  //       method: 'POST',
+  //       headers: { 'Content-Type': 'application/json' },
+  //       body: JSON.stringify(form)
+  //     });
+  //     setStatus('success');
+  //     setForm(initialState);
+  //   } catch {
+  //     setStatus('error');
+  //   }
+  // };
 
   if (status === 'success') {
     return (
@@ -57,7 +60,7 @@ const VolunteerForm = () => {
             <div className="ai-label"><ClipboardList size={13} /> What happens next?</div>
             <p>1. Background verification (2–3 days){'\n'}2. Orientation session (online/offline){'\n'}3. Skill-matched assignment to a team{'\n'}4. You start making a difference!</p>
           </div>
-          <button className="btn-primary" onClick={() => setStatus(null)}>Register Another Volunteer</button>
+          <button className="btn-primary" onClick={resetForm}>Register Another Volunteer</button>
         </div>
       </div>
     );
