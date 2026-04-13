@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Stethoscope, CheckCircle, Bot, AlertTriangle, Loader } from 'lucide-react';
 import { useForm } from '../hooks/useForm';
+import FormField from './FormField';
 import './Form.css';
-
-// const API = process.env.REACT_APP_API_URL || '';
 
 const initialState = {
   name: '', age: '', email: '', phone: '',
@@ -18,30 +17,8 @@ const urgencyConfig = {
 };
 
 const PatientForm = () => {
-  // const [form, setForm] = useState(initialState);
-  // const [status, setStatus] = useState(null);
-  // const [result, setResult] = useState(null);
-  const {form,status,result,handleChange,handleSubmit,resetForm} = useForm(initialState,'/api/patients');
-
-  // const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
-
-  // const handleSubmit = async e => {
-  //   e.preventDefault();
-  //   setStatus('loading');
-  //   try {
-  //     const res = await fetch(`${API}/api/patients`, {
-  //       method: 'POST',
-  //       headers: { 'Content-Type': 'application/json' },
-  //       body: JSON.stringify(form)
-  //     });
-  //     const data = await res.json();
-  //     setResult(data);
-  //     setStatus('success');
-  //     setForm(initialState);
-  //   } catch {
-  //     setStatus('error');
-  //   }
-  // };
+  const { form, status, result, handleChange, handleSubmit, resetForm } = 
+    useForm(initialState, '/api/patients');
 
   if (status === 'success') {
     return (
@@ -71,31 +48,53 @@ const PatientForm = () => {
 
         <form onSubmit={handleSubmit} className="form-body">
           <div className="form-row">
-            <div className="form-group">
-              <label>Full Name *</label>
-              <input name="name" value={form.name} onChange={handleChange} placeholder="Enter your full name" required />
-            </div>
-            <div className="form-group">
-              <label>Age *</label>
-              <input name="age" type="number" value={form.age} onChange={handleChange} placeholder="Your age" min="0" max="120" required />
-            </div>
+            <FormField
+              label="Full Name"
+              name="name"
+              value={form.name}
+              onChange={handleChange}
+              placeholder="Enter your full name"
+              required={true}
+            />
+            <FormField
+              label="Age"
+              name="age"
+              type="number"
+              value={form.age}
+              onChange={handleChange}
+              placeholder="Your age"
+              required={true}
+            />
           </div>
 
           <div className="form-row">
-            <div className="form-group">
-              <label>Email Address *</label>
-              <input name="email" type="email" value={form.email} onChange={handleChange} placeholder="your@email.com" required />
-            </div>
-            <div className="form-group">
-              <label>Phone Number *</label>
-              <input name="phone" value={form.phone} onChange={handleChange} placeholder="+91 XXXXX XXXXX" required />
-            </div>
+            <FormField
+              label="Email Address"
+              name="email"
+              type="email"
+              value={form.email}
+              onChange={handleChange}
+              placeholder="your@email.com"
+              required={true}
+            />
+            <FormField
+              label="Phone Number"
+              name="phone"
+              value={form.phone}
+              onChange={handleChange}
+              placeholder="+91 XXXXX XXXXX"
+              required={true}
+            />
           </div>
 
-          <div className="form-group">
-            <label>Medical Condition / Diagnosis *</label>
-            <input name="condition" value={form.condition} onChange={handleChange} placeholder="e.g., Diabetes, Cancer, TB, General checkup needed..." required />
-          </div>
+          <FormField
+            label="Medical Condition / Diagnosis"
+            name="condition"
+            value={form.condition}
+            onChange={handleChange}
+            placeholder="e.g., Diabetes, Cancer, TB, General checkup needed..."
+            required={true}
+          />
 
           <div className="form-group">
             <label>Urgency Level *</label>
@@ -111,17 +110,24 @@ const PatientForm = () => {
             </div>
           </div>
 
-          <div className="form-group">
-            <label>Type of Support Needed *</label>
-            <textarea name="supportNeeded" value={form.supportNeeded} onChange={handleChange}
-              placeholder="Describe what kind of help you need — medical supplies, counseling, home visits, medication assistance, etc."
-              rows={3} required />
-          </div>
+          <FormField
+            label="Type of Support Needed"
+            name="supportNeeded"
+            type="textarea"
+            value={form.supportNeeded}
+            onChange={handleChange}
+            placeholder="Describe what kind of help you need — medical supplies, counseling, home visits, medication assistance, etc."
+            rows={3}
+            required={true}
+          />
 
-          <div className="form-group">
-            <label>Address / Location</label>
-            <input name="address" value={form.address} onChange={handleChange} placeholder="Your area / district (helps us assign nearest volunteer)" />
-          </div>
+          <FormField
+            label="Address / Location"
+            name="address"
+            value={form.address}
+            onChange={handleChange}
+            placeholder="Your area / district (helps us assign nearest volunteer)"
+          />
 
           <div className="ai-note">
             <Bot size={15} color="#0a7c6e" />
