@@ -1,49 +1,80 @@
 const express = require("express");
 const router = express.Router();
-const Patient = require("../models/Patient");
+const protect = require("../middleware/authMiddleware");
+const patientService = require("../services/patientService");
 
-// AI-powered summary generator
-function generateAISummary(data) {
-  const urgencyMap = {
-    critical: "⚠️ CRITICAL — Immediate intervention required.",
-    high: "🔴 HIGH priority — Urgent attention needed within 24 hours.",
-    medium: "🟡 MEDIUM priority — Schedule within this week.",
-    low: "🟢 LOW priority — Standard queue, monitor regularly.",
-  };
-
-  return `Patient ${data.name} (Age: ${data.age}) requires support for: ${data.condition}. 
-Support needed: ${data.supportNeeded}. 
-Priority assessment: ${urgencyMap[data.urgency] || urgencyMap["medium"]}
-Auto-assigned for follow-up. Contact: ${data.email} | ${data.phone}.`;
-}
-
-// POST - Register patient
+// POST — public
 router.post("/", async (req, res) => {
-  try {
-    const aiSummary = generateAISummary(req.body);
-    const patient = new Patient({ ...req.body, aiSummary });
-    await patient.save();
-    res.status(201).json({ success: true, data: patient, aiSummary });
-  } catch (err) {
-    // Fallback for no-DB mode
-    const aiSummary = generateAISummary(req.body);
-    res.status(201).json({
-      success: true,
-      data: { ...req.body, _id: Date.now(), createdAt: new Date() },
-      aiSummary,
-      note: "Saved in-memory (DB not connected)",
-    });
-  }
+    try {
+        const { patient, aiSummary } = await patientService.registerPatient(req.body);
+        res.status(201).json({
+            success: true,
+            message: "Registration successful ✅",
+            data: patient,
+            aiSummary
+        });
+    } catch(err) {
+        res.status(err.statusCode || 500).json({
+            success: false,
+            message: err.message || "Server error"
+        });
+    }
 });
 
-// GET - All patients
-router.get("/", async (req, res) => {
-  try {
-    const patients = await Patient.find().sort({ createdAt: -1 });
-    res.json({ success: true, data: patients });
-  } catch (err) {
-    res.json({ success: true, data: [], note: "DB not connected" });
-  }
+// GET all — protected
+router.get("/", protect, async (req, res) => {
+    try {
+        const { patients, pagination } = await patientService.getAllPatients(req.query);
+        res.json({ success: true, data: patients, pagination });
+    } catch(err) {
+        res.status(err.statusCode || 500).json({
+            success: false,
+            message: err.message || "Server error"
+        });
+    }
+});
+
+// GET one — protected
+router.get("/:id", protect, async (req, res) => {
+    try {
+        const patient = await patientService.getPatientById(req.params.id);
+        res.json({ success: true, data: patient });
+    } catch(err) {
+        res.status(err.statusCode || 500).json({
+            success: false,
+            message: err.message || "Server error"
+        });
+    }
+});
+
+// PUT — protected
+router.put("/:id", protect, async (req, res) => {
+    try {
+        const patient = await patientService.updatePatient(req.params.id, req.body);
+        res.json({
+            success: true,
+            message: "Patient updated ✅",
+            data: patient
+        });
+    } catch(err) {
+        res.status(err.statusCode || 500).json({
+            success: false,
+            message: err.message || "Server error"
+        });
+    }
+});
+
+// DELETE — protected
+router.delete("/:id", protect, async (req, res) => {
+    try {
+        await patientService.deletePatient(req.params.id);
+        res.json({ success: true, message: "Patient deleted ✅" });
+    } catch(err) {
+        res.status(err.statusCode || 500).json({
+            success: false,
+            message: err.message || "Server error"
+        });
+    }
 });
 
 module.exports = router;
