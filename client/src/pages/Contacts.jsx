@@ -4,9 +4,9 @@ import api from "../api/axiosInstance";
 import ConfirmModal from "../components/ConfirmModal";
 import toast from "react-hot-toast";
 
-export default function Patients() {
+export default function Contacts() {
     const [searchParams, setSearchParams] = useSearchParams();
-    const [patients, setPatients] = useState([]);
+    const [contacts, setContacts] = useState([]);
     const [pagination, setPagination] = useState({});
     const [loading, setLoading] = useState(false);
     const [modal, setModal] = useState({
@@ -19,33 +19,22 @@ export default function Patients() {
     });
     const navigate = useNavigate();
 
-    const status = searchParams.get("status") || "";
-    const urgency = searchParams.get("urgency") || "";
     const page = parseInt(searchParams.get("page")) || 1;
-
-    const urgencyColor = {
-        critical: "#dc2626",
-        high: "#ea580c",
-        medium: "#ca8a04",
-        low: "#16a34a"
-    };
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => {
-        fetchPatients();
-    }, [status, urgency, page]);
+        fetchContacts();
+    }, [page]);
 
-    const fetchPatients = async () => {
+    const fetchContacts = async () => {
         setLoading(true);
         try {
             const params = new URLSearchParams();
-            if(status) params.set("status", status);
-            if(urgency) params.set("urgency", urgency);
             params.set("page", page);
             params.set("limit", 10);
 
-            const res = await api.get(`/api/patients?${params.toString()}`);
-            setPatients(res.data.data);
+            const res = await api.get(`/api/contacts?${params.toString()}`);
+            setContacts(res.data.data);
             setPagination(res.data.pagination);
 
         } catch(err) {
@@ -62,55 +51,29 @@ export default function Patients() {
             const params = new URLSearchParams(prev);
             if(value) params.set(key, value);
             else params.delete(key);
-            if(key !== "page") params.set("page", "1");
             return params;
         });
     };
-
-    const resetFilters = () => setSearchParams({});
 
     const handleLogout = () => {
         localStorage.clear();
         navigate("/admin/login");
     };
 
-    const handleUpdateStatus = (id, newStatus) => {
-        setModal({
-            isOpen: true,
-            title: "Update Patient Status",
-            message: `Are you sure you want to change status to "${newStatus}"?`,
-            confirmText: "Update",
-            confirmColor: "#0a7c6e",
-            onConfirm: async () => {
-                try {
-                    await api.put(`/api/patients/${id}`, { status: newStatus });
-                    setPatients(prev =>
-                        prev.map(p => p._id === id ? { ...p, status: newStatus } : p)
-                    );
-                    toast.success(`Status updated to "${newStatus}" ✅`);
-                } catch(err) {
-                    toast.error("Failed to update status");
-                } finally {
-                    setModal(prev => ({ ...prev, isOpen: false }));
-                }
-            }
-        });
-    };
-
     const handleDelete = (id) => {
         setModal({
             isOpen: true,
-            title: "Delete Patient",
-            message: "Are you sure you want to delete this patient? This action cannot be undone.",
+            title: "Delete Message",
+            message: "Are you sure you want to delete this message? This action cannot be undone.",
             confirmText: "Delete",
             confirmColor: "#dc2626",
             onConfirm: async () => {
                 try {
-                    await api.delete(`/api/patients/${id}`);
-                    setPatients(prev => prev.filter(p => p._id !== id));
-                    toast.success("Patient deleted successfully ✅");
+                    await api.delete(`/api/contacts/${id}`);
+                    setContacts(prev => prev.filter(c => c._id !== id));
+                    toast.success("Message deleted successfully ✅");
                 } catch(err) {
-                    toast.error("Failed to delete patient");
+                    toast.error("Failed to delete message");
                 } finally {
                     setModal(prev => ({ ...prev, isOpen: false }));
                 }
@@ -126,7 +89,7 @@ export default function Patients() {
             marginBottom: "10px",
             borderRadius: "8px"
         }}>
-            {[["40%", "20px"], ["60%", "15px"], ["30%", "15px"]].map(([width, height], i) => (
+            {[["40%", "20px"], ["60%", "15px"], ["80%", "15px"], ["50%", "15px"]].map(([width, height], i) => (
                 <div key={i} style={{
                     height,
                     width,
@@ -163,7 +126,7 @@ export default function Patients() {
                 <h2 style={{ margin: 0 }}>HealthBridge Admin</h2>
                 <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
                     <button onClick={() => navigate("/admin/patients")}
-                        style={{ background: "white", color: "#0a7c6e", border: "none", padding: "8px 15px", borderRadius: "6px", cursor: "pointer", fontWeight: "600" }}>
+                        style={{ background: "transparent", color: "white", border: "1px solid white", padding: "8px 15px", borderRadius: "6px", cursor: "pointer" }}>
                         Patients
                     </button>
                     <button onClick={() => navigate("/admin/volunteers")}
@@ -171,7 +134,7 @@ export default function Patients() {
                         Volunteers
                     </button>
                     <button onClick={() => navigate("/admin/contacts")}
-                        style={{ background: "transparent", color: "white", border: "1px solid white", padding: "8px 15px", borderRadius: "6px", cursor: "pointer" }}>
+                        style={{ background: "white", color: "#0a7c6e", border: "none", padding: "8px 15px", borderRadius: "6px", cursor: "pointer", fontWeight: "600" }}>
                         Contacts
                     </button>
                     <span style={{ fontSize: "14px" }}>👤 {localStorage.getItem("adminName")}</span>
@@ -187,41 +150,16 @@ export default function Patients() {
                 {/* Title */}
                 <div style={{ marginBottom: "20px" }}>
                     <h3 style={{ margin: 0 }}>
-                        Patients
-                        {pagination.totalPatients > 0 && (
+                        Contact Messages
+                        {pagination.totalContacts > 0 && (
                             <span style={{ fontSize: "14px", color: "gray", fontWeight: "normal", marginLeft: "10px" }}>
-                                ({pagination.totalPatients} total)
+                                ({pagination.totalContacts} total)
                             </span>
                         )}
                     </h3>
                     <p style={{ color: "gray", fontSize: "11px", margin: "5px 0 0" }}>
                         🔗 {window.location.href}
                     </p>
-                </div>
-
-                {/* Filters */}
-                <div style={{ display: "flex", gap: "10px", marginBottom: "20px", flexWrap: "wrap" }}>
-                    <select value={status} onChange={(e) => setFilter("status", e.target.value)}
-                        style={{ padding: "8px 12px", borderRadius: "6px", border: "1px solid #ddd" }}>
-                        <option value="">All Status</option>
-                        <option value="pending">Pending</option>
-                        <option value="assigned">Assigned</option>
-                        <option value="resolved">Resolved</option>
-                    </select>
-
-                    <select value={urgency} onChange={(e) => setFilter("urgency", e.target.value)}
-                        style={{ padding: "8px 12px", borderRadius: "6px", border: "1px solid #ddd" }}>
-                        <option value="">All Urgency</option>
-                        <option value="critical">Critical</option>
-                        <option value="high">High</option>
-                        <option value="medium">Medium</option>
-                        <option value="low">Low</option>
-                    </select>
-
-                    <button onClick={resetFilters}
-                        style={{ padding: "8px 15px", borderRadius: "6px", border: "1px solid #ddd", background: "white", cursor: "pointer" }}>
-                        Reset Filters
-                    </button>
                 </div>
 
                 {/* Skeleton Loading */}
@@ -233,38 +171,40 @@ export default function Patients() {
                     </div>
                 )}
 
-                {/* Patient List */}
-                {!loading && patients.map(patient => (
-                    <div key={patient._id} style={{
+                {/* Contact List */}
+                {!loading && contacts.map(contact => (
+                    <div key={contact._id} style={{
                         background: "white",
                         border: "1px solid #ddd",
                         padding: "20px",
                         marginBottom: "10px",
                         borderRadius: "8px",
-                        borderLeft: `4px solid ${urgencyColor[patient.urgency]}`
+                        borderLeft: "4px solid #0a7c6e"
                     }}>
                         <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "10px" }}>
-                            <div>
-                                <h4 style={{ margin: "0 0 5px" }}>{patient.name} — Age {patient.age}</h4>
-                                <p style={{ margin: "0 0 5px", color: "gray" }}>{patient.condition}</p>
-                                <p style={{ margin: "0 0 5px", fontSize: "13px" }}>📧 {patient.email} | 📱 {patient.phone}</p>
-                                <p style={{ margin: "0 0 5px", fontSize: "12px", color: "gray" }}>{patient.supportNeeded}</p>
-                                <p style={{ margin: "0", fontSize: "11px", color: "#999" }}>
-                                    Registered: {new Date(patient.createdAt).toLocaleDateString()}
+                            <div style={{ flex: 1 }}>
+                                <h4 style={{ margin: "0 0 5px" }}>{contact.name}</h4>
+                                <p style={{ margin: "0 0 5px", fontSize: "13px" }}>📧 {contact.email}</p>
+                                <p style={{ margin: "0 0 8px", fontWeight: "600" }}>📌 {contact.subject}</p>
+                                <p style={{ margin: "0 0 8px", fontSize: "13px", color: "gray" }}>{contact.message}</p>
+                                {contact.autoReply && (
+                                    <div style={{
+                                        background: "#f0fdf4",
+                                        border: "1px solid #86efac",
+                                        padding: "10px",
+                                        borderRadius: "6px",
+                                        fontSize: "12px",
+                                        color: "#166534"
+                                    }}>
+                                        <strong>Auto Reply:</strong> {contact.autoReply}
+                                    </div>
+                                )}
+                                <p style={{ margin: "8px 0 0", fontSize: "11px", color: "#999" }}>
+                                    Received: {new Date(contact.createdAt).toLocaleDateString()}
                                 </p>
                             </div>
-                            <div style={{ display: "flex", flexDirection: "column", gap: "8px", minWidth: "150px" }}>
-                                <span style={{ background: urgencyColor[patient.urgency], color: "white", padding: "3px 10px", borderRadius: "20px", fontSize: "12px", textAlign: "center" }}>
-                                    {patient.urgency}
-                                </span>
-                                <select value={patient.status}
-                                    onChange={(e) => handleUpdateStatus(patient._id, e.target.value)}
-                                    style={{ padding: "6px", borderRadius: "6px", border: "1px solid #ddd", fontSize: "13px" }}>
-                                    <option value="pending">Pending</option>
-                                    <option value="assigned">Assigned</option>
-                                    <option value="resolved">Resolved</option>
-                                </select>
-                                <button onClick={() => handleDelete(patient._id)}
+                            <div>
+                                <button onClick={() => handleDelete(contact._id)}
                                     style={{ padding: "6px 10px", background: "#fee2e2", color: "#dc2626", border: "1px solid #fca5a5", borderRadius: "6px", cursor: "pointer", fontSize: "13px" }}>
                                     🗑 Delete
                                 </button>
@@ -274,11 +214,10 @@ export default function Patients() {
                 ))}
 
                 {/* No results */}
-                {!loading && patients.length === 0 && (
+                {!loading && contacts.length === 0 && (
                     <div style={{ textAlign: "center", padding: "40px", color: "gray", background: "white", borderRadius: "8px" }}>
-                        <p style={{ fontSize: "40px", margin: "0 0 10px" }}>🔍</p>
-                        <p style={{ fontSize: "16px", fontWeight: "500" }}>No patients found</p>
-                        <p style={{ fontSize: "13px" }}>Try adjusting your filters</p>
+                        <p style={{ fontSize: "40px", margin: "0 0 10px" }}>📭</p>
+                        <p style={{ fontSize: "16px", fontWeight: "500" }}>No messages found</p>
                     </div>
                 )}
 
@@ -302,9 +241,9 @@ export default function Patients() {
                     </div>
                 )}
 
-                {pagination.totalPatients > 0 && (
+                {pagination.totalContacts > 0 && (
                     <p style={{ color: "gray", fontSize: "13px", marginTop: "10px" }}>
-                        Showing page {pagination.currentPage} of {pagination.totalPages} ({pagination.totalPatients} total)
+                        Showing page {pagination.currentPage} of {pagination.totalPages} ({pagination.totalContacts} total)
                     </p>
                 )}
             </div>

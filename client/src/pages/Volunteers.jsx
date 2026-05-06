@@ -4,9 +4,9 @@ import api from "../api/axiosInstance";
 import ConfirmModal from "../components/ConfirmModal";
 import toast from "react-hot-toast";
 
-export default function Patients() {
+export default function Volunteers() {
     const [searchParams, setSearchParams] = useSearchParams();
-    const [patients, setPatients] = useState([]);
+    const [volunteers, setVolunteers] = useState([]);
     const [pagination, setPagination] = useState({});
     const [loading, setLoading] = useState(false);
     const [modal, setModal] = useState({
@@ -20,32 +20,31 @@ export default function Patients() {
     const navigate = useNavigate();
 
     const status = searchParams.get("status") || "";
-    const urgency = searchParams.get("urgency") || "";
+    const availability = searchParams.get("availability") || "";
     const page = parseInt(searchParams.get("page")) || 1;
 
-    const urgencyColor = {
-        critical: "#dc2626",
-        high: "#ea580c",
-        medium: "#ca8a04",
-        low: "#16a34a"
+    const statusColor = {
+        pending: "#ca8a04",
+        approved: "#2563eb",
+        active: "#16a34a"
     };
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => {
-        fetchPatients();
-    }, [status, urgency, page]);
+        fetchVolunteers();
+    }, [status, availability, page]);
 
-    const fetchPatients = async () => {
+    const fetchVolunteers = async () => {
         setLoading(true);
         try {
             const params = new URLSearchParams();
             if(status) params.set("status", status);
-            if(urgency) params.set("urgency", urgency);
+            if(availability) params.set("availability", availability);
             params.set("page", page);
             params.set("limit", 10);
 
-            const res = await api.get(`/api/patients?${params.toString()}`);
-            setPatients(res.data.data);
+            const res = await api.get(`/api/volunteers?${params.toString()}`);
+            setVolunteers(res.data.data);
             setPagination(res.data.pagination);
 
         } catch(err) {
@@ -77,15 +76,15 @@ export default function Patients() {
     const handleUpdateStatus = (id, newStatus) => {
         setModal({
             isOpen: true,
-            title: "Update Patient Status",
+            title: "Update Volunteer Status",
             message: `Are you sure you want to change status to "${newStatus}"?`,
             confirmText: "Update",
             confirmColor: "#0a7c6e",
             onConfirm: async () => {
                 try {
-                    await api.put(`/api/patients/${id}`, { status: newStatus });
-                    setPatients(prev =>
-                        prev.map(p => p._id === id ? { ...p, status: newStatus } : p)
+                    await api.put(`/api/volunteers/${id}`, { status: newStatus });
+                    setVolunteers(prev =>
+                        prev.map(v => v._id === id ? { ...v, status: newStatus } : v)
                     );
                     toast.success(`Status updated to "${newStatus}" ✅`);
                 } catch(err) {
@@ -100,17 +99,17 @@ export default function Patients() {
     const handleDelete = (id) => {
         setModal({
             isOpen: true,
-            title: "Delete Patient",
-            message: "Are you sure you want to delete this patient? This action cannot be undone.",
+            title: "Delete Volunteer",
+            message: "Are you sure you want to delete this volunteer? This action cannot be undone.",
             confirmText: "Delete",
             confirmColor: "#dc2626",
             onConfirm: async () => {
                 try {
-                    await api.delete(`/api/patients/${id}`);
-                    setPatients(prev => prev.filter(p => p._id !== id));
-                    toast.success("Patient deleted successfully ✅");
+                    await api.delete(`/api/volunteers/${id}`);
+                    setVolunteers(prev => prev.filter(v => v._id !== id));
+                    toast.success("Volunteer deleted successfully ✅");
                 } catch(err) {
-                    toast.error("Failed to delete patient");
+                    toast.error("Failed to delete volunteer");
                 } finally {
                     setModal(prev => ({ ...prev, isOpen: false }));
                 }
@@ -163,11 +162,11 @@ export default function Patients() {
                 <h2 style={{ margin: 0 }}>HealthBridge Admin</h2>
                 <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
                     <button onClick={() => navigate("/admin/patients")}
-                        style={{ background: "white", color: "#0a7c6e", border: "none", padding: "8px 15px", borderRadius: "6px", cursor: "pointer", fontWeight: "600" }}>
+                        style={{ background: "transparent", color: "white", border: "1px solid white", padding: "8px 15px", borderRadius: "6px", cursor: "pointer" }}>
                         Patients
                     </button>
                     <button onClick={() => navigate("/admin/volunteers")}
-                        style={{ background: "transparent", color: "white", border: "1px solid white", padding: "8px 15px", borderRadius: "6px", cursor: "pointer" }}>
+                        style={{ background: "white", color: "#0a7c6e", border: "none", padding: "8px 15px", borderRadius: "6px", cursor: "pointer", fontWeight: "600" }}>
                         Volunteers
                     </button>
                     <button onClick={() => navigate("/admin/contacts")}
@@ -187,10 +186,10 @@ export default function Patients() {
                 {/* Title */}
                 <div style={{ marginBottom: "20px" }}>
                     <h3 style={{ margin: 0 }}>
-                        Patients
-                        {pagination.totalPatients > 0 && (
+                        Volunteers
+                        {pagination.totalVolunteers > 0 && (
                             <span style={{ fontSize: "14px", color: "gray", fontWeight: "normal", marginLeft: "10px" }}>
-                                ({pagination.totalPatients} total)
+                                ({pagination.totalVolunteers} total)
                             </span>
                         )}
                     </h3>
@@ -205,17 +204,17 @@ export default function Patients() {
                         style={{ padding: "8px 12px", borderRadius: "6px", border: "1px solid #ddd" }}>
                         <option value="">All Status</option>
                         <option value="pending">Pending</option>
-                        <option value="assigned">Assigned</option>
-                        <option value="resolved">Resolved</option>
+                        <option value="approved">Approved</option>
+                        <option value="active">Active</option>
                     </select>
 
-                    <select value={urgency} onChange={(e) => setFilter("urgency", e.target.value)}
+                    <select value={availability} onChange={(e) => setFilter("availability", e.target.value)}
                         style={{ padding: "8px 12px", borderRadius: "6px", border: "1px solid #ddd" }}>
-                        <option value="">All Urgency</option>
-                        <option value="critical">Critical</option>
-                        <option value="high">High</option>
-                        <option value="medium">Medium</option>
-                        <option value="low">Low</option>
+                        <option value="">All Availability</option>
+                        <option value="weekdays">Weekdays</option>
+                        <option value="weekends">Weekends</option>
+                        <option value="both">Both</option>
+                        <option value="flexible">Flexible</option>
                     </select>
 
                     <button onClick={resetFilters}
@@ -233,38 +232,41 @@ export default function Patients() {
                     </div>
                 )}
 
-                {/* Patient List */}
-                {!loading && patients.map(patient => (
-                    <div key={patient._id} style={{
+                {/* Volunteer List */}
+                {!loading && volunteers.map(volunteer => (
+                    <div key={volunteer._id} style={{
                         background: "white",
                         border: "1px solid #ddd",
                         padding: "20px",
                         marginBottom: "10px",
                         borderRadius: "8px",
-                        borderLeft: `4px solid ${urgencyColor[patient.urgency]}`
+                        borderLeft: `4px solid ${statusColor[volunteer.status]}`
                     }}>
                         <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "10px" }}>
                             <div>
-                                <h4 style={{ margin: "0 0 5px" }}>{patient.name} — Age {patient.age}</h4>
-                                <p style={{ margin: "0 0 5px", color: "gray" }}>{patient.condition}</p>
-                                <p style={{ margin: "0 0 5px", fontSize: "13px" }}>📧 {patient.email} | 📱 {patient.phone}</p>
-                                <p style={{ margin: "0 0 5px", fontSize: "12px", color: "gray" }}>{patient.supportNeeded}</p>
+                                <h4 style={{ margin: "0 0 5px" }}>{volunteer.name}</h4>
+                                <p style={{ margin: "0 0 5px", fontSize: "13px" }}>📧 {volunteer.email} | 📱 {volunteer.phone}</p>
+                                {volunteer.skills?.length > 0 && (
+                                    <p style={{ margin: "0 0 5px", fontSize: "13px" }}>🛠 {volunteer.skills.join(", ")}</p>
+                                )}
+                                <p style={{ margin: "0 0 5px", fontSize: "13px", color: "gray" }}>🕐 {volunteer.availability}</p>
+                                <p style={{ margin: "0 0 5px", fontSize: "12px", color: "gray" }}>💬 {volunteer.motivation}</p>
                                 <p style={{ margin: "0", fontSize: "11px", color: "#999" }}>
-                                    Registered: {new Date(patient.createdAt).toLocaleDateString()}
+                                    Registered: {new Date(volunteer.createdAt).toLocaleDateString()}
                                 </p>
                             </div>
                             <div style={{ display: "flex", flexDirection: "column", gap: "8px", minWidth: "150px" }}>
-                                <span style={{ background: urgencyColor[patient.urgency], color: "white", padding: "3px 10px", borderRadius: "20px", fontSize: "12px", textAlign: "center" }}>
-                                    {patient.urgency}
+                                <span style={{ background: statusColor[volunteer.status], color: "white", padding: "3px 10px", borderRadius: "20px", fontSize: "12px", textAlign: "center" }}>
+                                    {volunteer.status}
                                 </span>
-                                <select value={patient.status}
-                                    onChange={(e) => handleUpdateStatus(patient._id, e.target.value)}
+                                <select value={volunteer.status}
+                                    onChange={(e) => handleUpdateStatus(volunteer._id, e.target.value)}
                                     style={{ padding: "6px", borderRadius: "6px", border: "1px solid #ddd", fontSize: "13px" }}>
                                     <option value="pending">Pending</option>
-                                    <option value="assigned">Assigned</option>
-                                    <option value="resolved">Resolved</option>
+                                    <option value="approved">Approved</option>
+                                    <option value="active">Active</option>
                                 </select>
-                                <button onClick={() => handleDelete(patient._id)}
+                                <button onClick={() => handleDelete(volunteer._id)}
                                     style={{ padding: "6px 10px", background: "#fee2e2", color: "#dc2626", border: "1px solid #fca5a5", borderRadius: "6px", cursor: "pointer", fontSize: "13px" }}>
                                     🗑 Delete
                                 </button>
@@ -274,10 +276,10 @@ export default function Patients() {
                 ))}
 
                 {/* No results */}
-                {!loading && patients.length === 0 && (
+                {!loading && volunteers.length === 0 && (
                     <div style={{ textAlign: "center", padding: "40px", color: "gray", background: "white", borderRadius: "8px" }}>
                         <p style={{ fontSize: "40px", margin: "0 0 10px" }}>🔍</p>
-                        <p style={{ fontSize: "16px", fontWeight: "500" }}>No patients found</p>
+                        <p style={{ fontSize: "16px", fontWeight: "500" }}>No volunteers found</p>
                         <p style={{ fontSize: "13px" }}>Try adjusting your filters</p>
                     </div>
                 )}
@@ -302,9 +304,9 @@ export default function Patients() {
                     </div>
                 )}
 
-                {pagination.totalPatients > 0 && (
+                {pagination.totalVolunteers > 0 && (
                     <p style={{ color: "gray", fontSize: "13px", marginTop: "10px" }}>
-                        Showing page {pagination.currentPage} of {pagination.totalPages} ({pagination.totalPatients} total)
+                        Showing page {pagination.currentPage} of {pagination.totalPages} ({pagination.totalVolunteers} total)
                     </p>
                 )}
             </div>

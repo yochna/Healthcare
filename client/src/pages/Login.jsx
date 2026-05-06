@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 
 const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
@@ -10,6 +10,10 @@ export default function Login() {
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+    const location = useLocation();
+
+    // where user was trying to go before login
+    const from = location.state?.from || "/admin/patients";
 
     const handleLogin = async () => {
         try {
@@ -26,8 +30,8 @@ export default function Login() {
             localStorage.setItem("refreshToken", res.data.refreshToken);
             localStorage.setItem("adminName", res.data.admin.name);
 
-            // redirect to patients
-            navigate("/admin/patients");
+            // redirect back to where they came from
+            navigate(from, { replace: true });
 
         } catch(err) {
             setError(err.response?.data?.message || "Invalid email or password");
@@ -36,7 +40,6 @@ export default function Login() {
         }
     };
 
-    // allow login on Enter key
     const handleKeyPress = (e) => {
         if(e.key === "Enter") handleLogin();
     };
@@ -65,6 +68,12 @@ export default function Login() {
                     <p style={{ color: "gray", fontSize: "14px" }}>
                         Sign in to access the dashboard
                     </p>
+                    {/* show where they'll be redirected */}
+                    {from !== "/admin/patients" && (
+                        <p style={{ color: "#0a7c6e", fontSize: "12px", marginTop: "5px" }}>
+                            You'll be redirected to {from} after login
+                        </p>
+                    )}
                 </div>
 
                 {/* Error */}

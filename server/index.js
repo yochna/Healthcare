@@ -7,6 +7,8 @@ const morgan = require("morgan");
 const rateLimit = require("express-rate-limit");
 const mongoSanitize = require("express-mongo-sanitize");
 const xss = require("xss-clean");
+const swaggerUi = require("swagger-ui-express");
+const swaggerSpec = require("./config/swagger");
 
 const app = express();
 
@@ -17,7 +19,7 @@ app.use(xss());
 
 // ✅ Rate limiting — all routes
 const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
+    windowMs: 15 * 60 * 1000,
     max: 100,
     message: { success: false, message: "Too many requests, try again after 15 minutes" }
 });
@@ -38,6 +40,9 @@ if(process.env.NODE_ENV === "development") {
 // ✅ Body parsing with size limit
 app.use(express.json({ limit: "10kb" }));
 app.use(cors({ origin: process.env.CLIENT_URL || "http://localhost:3000" }));
+
+// ✅ Swagger docs
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // ✅ Public routes
 app.use("/api/auth/login", authLimiter);
@@ -74,4 +79,4 @@ mongoose
     .catch((err) => console.log("⚠️ MongoDB not connected:", err.message));
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT} ✅`));
