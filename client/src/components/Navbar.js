@@ -27,7 +27,7 @@ const Navbar = ({ activeTab, setActiveTab }) => {
           <span className="brand-name">Health<span>Bridge</span></span>
         </div>
 
-        <button
+      <button
     className="hamburger"
     onClick={() => setMenuOpen(!menuOpen)}
     aria-label={menuOpen ? "Close menu" : "Open menu"}

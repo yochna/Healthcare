@@ -80,6 +80,7 @@
   font-size: 15px;
   font-weight: 600;
   transition: all 0.25s;
+  cursor: pointer;
 }
 .btn-primary:hover {
   background: var(--teal-light);
@@ -96,6 +97,7 @@
   font-size: 15px;
   font-weight: 600;
   transition: all 0.25s;
+  cursor: pointer;
 }
 .btn-secondary:hover {
   border-color: var(--teal);
@@ -103,17 +105,22 @@
   transform: translateY(-2px);
 }
 
+/* ✅ Fixed: white color on dark background for better contrast */
 .btn-outline {
   background: transparent;
   color: white;
-  border: 2px solid rgba(255,255,255,0.5);
+  border: 2px solid white;    /* ✅ was rgba(255,255,255,0.5) → now solid white */
   padding: 13px 28px;
   border-radius: 50px;
   font-size: 15px;
   font-weight: 600;
   transition: all 0.25s;
+  cursor: pointer;
 }
-.btn-outline:hover { background: rgba(255,255,255,0.1); border-color: white; }
+.btn-outline:hover {
+  background: rgba(255,255,255,0.15);
+  border-color: white;
+}
 
 .hero-note {
   display: flex;
@@ -169,8 +176,21 @@
   padding: 48px 80px;
 }
 .stat-card { text-align: center; }
-.stat-value { font-family: 'Playfair Display', serif; font-size: 40px; font-weight: 700; color: white; }
-.stat-label { font-size: 13px; color: rgba(255,255,255,0.7); margin-top: 4px; font-weight: 500; letter-spacing: 0.5px; text-transform: uppercase; }
+.stat-value {
+  font-family: 'Playfair Display', serif;
+  font-size: 40px;
+  font-weight: 700;
+  color: white;
+}
+/* ✅ Fixed: was rgba(255,255,255,0.7) → now white for better contrast */
+.stat-label {
+  font-size: 13px;
+  color: white;
+  margin-top: 4px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
 
 /* Services */
 .services-section {
@@ -232,7 +252,10 @@
   flex-wrap: wrap;
 }
 .cta-inner h2 { font-size: 32px; color: white; margin-bottom: 8px; }
-.cta-inner p { color: rgba(255,255,255,0.65); font-size: 15px; }
+
+/* ✅ Fixed: was rgba(255,255,255,0.65) → now 0.9 for better contrast */
+.cta-inner p { color: rgba(255,255,255,0.9); font-size: 15px; }
+
 .cta-buttons { display: flex; gap: 12px; flex-shrink: 0; }
 
 @media (max-width: 900px) {
