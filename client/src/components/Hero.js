@@ -59,15 +59,30 @@ const Hero = ({ setActiveTab }) => {
         <div className="hero-visual">
           <div className="float-card card-1">
             <Bot size={28} color="#0a7c6e" />
-            <div><strong>AI Chatbot Active</strong><p>Ask any health question</p></div>
+            <div>
+              <strong>AI Chatbot Active</strong>
+              <p style={{ color: "#444", margin: 0, fontSize: "13px" }}>
+                Ask any health question
+              </p>
+            </div>
           </div>
           <div className="float-card card-2">
             <Zap size={28} color="#e85d26" />
-            <div><strong>Auto-Response</strong><p>Instant support summaries</p></div>
+            <div>
+              <strong>Auto-Response</strong>
+              <p style={{ color: "#444", margin: 0, fontSize: "13px" }}>
+                Instant support summaries
+              </p>
+            </div>
           </div>
           <div className="float-card card-3">
             <HeartHandshake size={28} color="#22c55e" />
-            <div><strong>Free Services</strong><p>No charges, ever</p></div>
+            <div>
+              <strong>Free Services</strong>
+              <p style={{ color: "#444", margin: 0, fontSize: "13px" }}>
+                No charges, ever
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -92,7 +107,9 @@ const Hero = ({ setActiveTab }) => {
             const Icon = svc.icon;
             return (
               <div className="service-card" key={i} style={{ animationDelay: `${i * 0.08}s` }}>
-                <div className="svc-icon"><Icon size={30} color="#0a7c6e" strokeWidth={1.5} /></div>
+                <div className="svc-icon">
+                  <Icon size={30} color="#0a7c6e" strokeWidth={1.5} />
+                </div>
                 <h3>{svc.title}</h3>
                 <p>{svc.desc}</p>
               </div>
@@ -111,7 +128,9 @@ const Hero = ({ setActiveTab }) => {
             <button className="btn-primary" onClick={() => setActiveTab('patient')}>
               Get Support Now <ArrowRight size={16} />
             </button>
-            <button className="btn-outline" onClick={() => setActiveTab('contact')}>Contact Us</button>
+            <button className="btn-outline" onClick={() => setActiveTab('contact')}>
+              Contact Us
+            </button>
           </div>
         </div>
       </section>
