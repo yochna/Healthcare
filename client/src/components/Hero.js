@@ -44,10 +44,16 @@ const Hero = ({ setActiveTab }) => {
             and community-driven healthcare — because good health is a right, not a privilege.
           </p>
           <div className="hero-actions">
-            <button className="btn-primary" onClick={() => setActiveTab('patient')}>
+            <button
+                className="btn-primary"
+                onClick={() => setActiveTab('patient')}
+                aria-label="Request Patient Support">
               <Stethoscope size={17} /> Request Patient Support
             </button>
-            <button className="btn-secondary" onClick={() => setActiveTab('volunteer')}>
+            <button
+                className="btn-secondary"
+                onClick={() => setActiveTab('volunteer')}
+                aria-label="Become a Volunteer">
               <HeartHandshake size={17} /> Become a Volunteer
             </button>
           </div>
@@ -125,10 +131,16 @@ const Hero = ({ setActiveTab }) => {
             <p>Our AI chatbot is available 24/7. For urgent medical support, fill our patient form.</p>
           </div>
           <div className="cta-buttons">
-            <button className="btn-primary" onClick={() => setActiveTab('patient')}>
+            <button
+                className="btn-primary"
+                onClick={() => setActiveTab('patient')}
+                aria-label="Get Support Now">
               Get Support Now <ArrowRight size={16} />
             </button>
-            <button className="btn-outline" onClick={() => setActiveTab('contact')}>
+            <button
+                className="btn-outline"
+                onClick={() => setActiveTab('contact')}
+                aria-label="Contact Us">
               Contact Us
             </button>
           </div>

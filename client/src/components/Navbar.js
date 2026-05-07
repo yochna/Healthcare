@@ -27,9 +27,13 @@ const Navbar = ({ activeTab, setActiveTab }) => {
           <span className="brand-name">Health<span>Bridge</span></span>
         </div>
 
-        <button className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
-          {menuOpen ? <X size={22} /> : <Menu size={22} />}
-        </button>
+        <button
+    className="hamburger"
+    onClick={() => setMenuOpen(!menuOpen)}
+    aria-label={menuOpen ? "Close menu" : "Open menu"}
+>
+    {menuOpen ? <X size={22} /> : <Menu size={22} />}
+</button>
 
         <ul className={`nav-links ${menuOpen ? 'open' : ''}`}>
           {navItems.map(item => (

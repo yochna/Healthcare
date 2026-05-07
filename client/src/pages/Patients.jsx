@@ -162,20 +162,28 @@ export default function Patients() {
             }}>
                 <h2 style={{ margin: 0 }}>HealthBridge Admin</h2>
                 <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
-                    <button onClick={() => navigate("/admin/patients")}
+                    <button
+                        onClick={() => navigate("/admin/patients")}
+                        aria-label="Go to Patients"
                         style={{ background: "white", color: "#0a7c6e", border: "none", padding: "8px 15px", borderRadius: "6px", cursor: "pointer", fontWeight: "600" }}>
                         Patients
                     </button>
-                    <button onClick={() => navigate("/admin/volunteers")}
+                    <button
+                        onClick={() => navigate("/admin/volunteers")}
+                        aria-label="Go to Volunteers"
                         style={{ background: "transparent", color: "white", border: "1px solid white", padding: "8px 15px", borderRadius: "6px", cursor: "pointer" }}>
                         Volunteers
                     </button>
-                    <button onClick={() => navigate("/admin/contacts")}
+                    <button
+                        onClick={() => navigate("/admin/contacts")}
+                        aria-label="Go to Contacts"
                         style={{ background: "transparent", color: "white", border: "1px solid white", padding: "8px 15px", borderRadius: "6px", cursor: "pointer" }}>
                         Contacts
                     </button>
                     <span style={{ fontSize: "14px" }}>👤 {localStorage.getItem("adminName")}</span>
-                    <button onClick={handleLogout}
+                    <button
+                        onClick={handleLogout}
+                        aria-label="Logout"
                         style={{ background: "#dc2626", color: "white", border: "none", padding: "8px 15px", borderRadius: "6px", cursor: "pointer" }}>
                         Logout
                     </button>
@@ -189,19 +197,22 @@ export default function Patients() {
                     <h3 style={{ margin: 0 }}>
                         Patients
                         {pagination.totalPatients > 0 && (
-                            <span style={{ fontSize: "14px", color: "gray", fontWeight: "normal", marginLeft: "10px" }}>
+                            <span style={{ fontSize: "14px", color: "#555", fontWeight: "normal", marginLeft: "10px" }}>
                                 ({pagination.totalPatients} total)
                             </span>
                         )}
                     </h3>
-                    <p style={{ color: "gray", fontSize: "11px", margin: "5px 0 0" }}>
+                    <p style={{ color: "#555", fontSize: "11px", margin: "5px 0 0" }}>
                         🔗 {window.location.href}
                     </p>
                 </div>
 
                 {/* Filters */}
                 <div style={{ display: "flex", gap: "10px", marginBottom: "20px", flexWrap: "wrap" }}>
-                    <select value={status} onChange={(e) => setFilter("status", e.target.value)}
+                    <select
+                        value={status}
+                        onChange={(e) => setFilter("status", e.target.value)}
+                        aria-label="Filter by status"
                         style={{ padding: "8px 12px", borderRadius: "6px", border: "1px solid #ddd" }}>
                         <option value="">All Status</option>
                         <option value="pending">Pending</option>
@@ -209,7 +220,10 @@ export default function Patients() {
                         <option value="resolved">Resolved</option>
                     </select>
 
-                    <select value={urgency} onChange={(e) => setFilter("urgency", e.target.value)}
+                    <select
+                        value={urgency}
+                        onChange={(e) => setFilter("urgency", e.target.value)}
+                        aria-label="Filter by urgency"
                         style={{ padding: "8px 12px", borderRadius: "6px", border: "1px solid #ddd" }}>
                         <option value="">All Urgency</option>
                         <option value="critical">Critical</option>
@@ -218,7 +232,9 @@ export default function Patients() {
                         <option value="low">Low</option>
                     </select>
 
-                    <button onClick={resetFilters}
+                    <button
+                        onClick={resetFilters}
+                        aria-label="Reset all filters"
                         style={{ padding: "8px 15px", borderRadius: "6px", border: "1px solid #ddd", background: "white", cursor: "pointer" }}>
                         Reset Filters
                     </button>
@@ -246,25 +262,40 @@ export default function Patients() {
                         <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "10px" }}>
                             <div>
                                 <h4 style={{ margin: "0 0 5px" }}>{patient.name} — Age {patient.age}</h4>
-                                <p style={{ margin: "0 0 5px", color: "gray" }}>{patient.condition}</p>
-                                <p style={{ margin: "0 0 5px", fontSize: "13px" }}>📧 {patient.email} | 📱 {patient.phone}</p>
-                                <p style={{ margin: "0 0 5px", fontSize: "12px", color: "gray" }}>{patient.supportNeeded}</p>
-                                <p style={{ margin: "0", fontSize: "11px", color: "#999" }}>
+                                <p style={{ margin: "0 0 5px", color: "#555" }}>{patient.condition}</p>
+                                <p style={{ margin: "0 0 5px", fontSize: "13px", color: "#333" }}>
+                                    📧 {patient.email} | 📱 {patient.phone}
+                                </p>
+                                <p style={{ margin: "0 0 5px", fontSize: "12px", color: "#555" }}>
+                                    {patient.supportNeeded}
+                                </p>
+                                <p style={{ margin: "0", fontSize: "11px", color: "#666" }}>
                                     Registered: {new Date(patient.createdAt).toLocaleDateString()}
                                 </p>
                             </div>
                             <div style={{ display: "flex", flexDirection: "column", gap: "8px", minWidth: "150px" }}>
-                                <span style={{ background: urgencyColor[patient.urgency], color: "white", padding: "3px 10px", borderRadius: "20px", fontSize: "12px", textAlign: "center" }}>
+                                <span style={{
+                                    background: urgencyColor[patient.urgency],
+                                    color: "white",
+                                    padding: "3px 10px",
+                                    borderRadius: "20px",
+                                    fontSize: "12px",
+                                    textAlign: "center"
+                                }}>
                                     {patient.urgency}
                                 </span>
-                                <select value={patient.status}
+                                <select
+                                    value={patient.status}
                                     onChange={(e) => handleUpdateStatus(patient._id, e.target.value)}
+                                    aria-label={`Update status for ${patient.name}`}
                                     style={{ padding: "6px", borderRadius: "6px", border: "1px solid #ddd", fontSize: "13px" }}>
                                     <option value="pending">Pending</option>
                                     <option value="assigned">Assigned</option>
                                     <option value="resolved">Resolved</option>
                                 </select>
-                                <button onClick={() => handleDelete(patient._id)}
+                                <button
+                                    onClick={() => handleDelete(patient._id)}
+                                    aria-label={`Delete patient ${patient.name}`}
                                     style={{ padding: "6px 10px", background: "#fee2e2", color: "#dc2626", border: "1px solid #fca5a5", borderRadius: "6px", cursor: "pointer", fontSize: "13px" }}>
                                     🗑 Delete
                                 </button>
@@ -275,27 +306,36 @@ export default function Patients() {
 
                 {/* No results */}
                 {!loading && patients.length === 0 && (
-                    <div style={{ textAlign: "center", padding: "40px", color: "gray", background: "white", borderRadius: "8px" }}>
+                    <div style={{ textAlign: "center", padding: "40px", color: "#555", background: "white", borderRadius: "8px" }}>
                         <p style={{ fontSize: "40px", margin: "0 0 10px" }}>🔍</p>
-                        <p style={{ fontSize: "16px", fontWeight: "500" }}>No patients found</p>
-                        <p style={{ fontSize: "13px" }}>Try adjusting your filters</p>
+                        <p style={{ fontSize: "16px", fontWeight: "500", color: "#333" }}>No patients found</p>
+                        <p style={{ fontSize: "13px", color: "#555" }}>Try adjusting your filters</p>
                     </div>
                 )}
 
                 {/* Pagination */}
                 {pagination.totalPages > 1 && (
                     <div style={{ display: "flex", gap: "8px", marginTop: "20px", flexWrap: "wrap" }}>
-                        <button onClick={() => setFilter("page", page - 1)} disabled={page === 1}
+                        <button
+                            onClick={() => setFilter("page", page - 1)}
+                            disabled={page === 1}
+                            aria-label="Previous page"
                             style={{ padding: "8px 15px", borderRadius: "6px", border: "1px solid #ddd", cursor: page === 1 ? "not-allowed" : "pointer", background: page === 1 ? "#f0f0f0" : "white" }}>
                             Previous
                         </button>
                         {[...Array(pagination.totalPages)].map((_, i) => (
-                            <button key={i} onClick={() => setFilter("page", i + 1)}
+                            <button
+                                key={i}
+                                onClick={() => setFilter("page", i + 1)}
+                                aria-label={`Go to page ${i + 1}`}
                                 style={{ padding: "8px 12px", borderRadius: "6px", border: "1px solid #0a7c6e", background: page === i + 1 ? "#0a7c6e" : "white", color: page === i + 1 ? "white" : "#0a7c6e", cursor: "pointer" }}>
                                 {i + 1}
                             </button>
                         ))}
-                        <button onClick={() => setFilter("page", page + 1)} disabled={page === pagination.totalPages}
+                        <button
+                            onClick={() => setFilter("page", page + 1)}
+                            disabled={page === pagination.totalPages}
+                            aria-label="Next page"
                             style={{ padding: "8px 15px", borderRadius: "6px", border: "1px solid #ddd", cursor: page === pagination.totalPages ? "not-allowed" : "pointer", background: page === pagination.totalPages ? "#f0f0f0" : "white" }}>
                             Next
                         </button>
@@ -303,7 +343,7 @@ export default function Patients() {
                 )}
 
                 {pagination.totalPatients > 0 && (
-                    <p style={{ color: "gray", fontSize: "13px", marginTop: "10px" }}>
+                    <p style={{ color: "#555", fontSize: "13px", marginTop: "10px" }}>
                         Showing page {pagination.currentPage} of {pagination.totalPages} ({pagination.totalPatients} total)
                     </p>
                 )}
