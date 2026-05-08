@@ -82,17 +82,10 @@ export default function Contacts() {
     };
 
     const SkeletonCard = () => (
-        <div style={{
-            background: "white",
-            border: "1px solid #ddd",
-            padding: "20px",
-            marginBottom: "10px",
-            borderRadius: "8px"
-        }}>
+        <div style={{ background: "white", border: "1px solid #ddd", padding: "20px", marginBottom: "10px", borderRadius: "8px" }}>
             {[["40%", "20px"], ["60%", "15px"], ["80%", "15px"], ["50%", "15px"]].map(([width, height], i) => (
                 <div key={i} style={{
-                    height,
-                    width,
+                    height, width,
                     background: "linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%)",
                     backgroundSize: "200% 100%",
                     animation: "shimmer 1.5s infinite",
@@ -114,31 +107,30 @@ export default function Contacts() {
 
             {/* Header */}
             <div style={{
-                background: "#0a7c6e",
-                color: "white",
-                padding: "15px 30px",
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                flexWrap: "wrap",
-                gap: "10px"
+                background: "#0a7c6e", color: "white", padding: "15px 30px",
+                display: "flex", justifyContent: "space-between", alignItems: "center",
+                flexWrap: "wrap", gap: "10px"
             }}>
                 <h2 style={{ margin: 0 }}>HealthBridge Admin</h2>
                 <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
                     <button onClick={() => navigate("/admin/patients")}
+                        aria-label="Go to Patients"
                         style={{ background: "transparent", color: "white", border: "1px solid white", padding: "8px 15px", borderRadius: "6px", cursor: "pointer" }}>
                         Patients
                     </button>
                     <button onClick={() => navigate("/admin/volunteers")}
+                        aria-label="Go to Volunteers"
                         style={{ background: "transparent", color: "white", border: "1px solid white", padding: "8px 15px", borderRadius: "6px", cursor: "pointer" }}>
                         Volunteers
                     </button>
                     <button onClick={() => navigate("/admin/contacts")}
+                        aria-label="Go to Contacts"
                         style={{ background: "white", color: "#0a7c6e", border: "none", padding: "8px 15px", borderRadius: "6px", cursor: "pointer", fontWeight: "600" }}>
                         Contacts
                     </button>
                     <span style={{ fontSize: "14px" }}>👤 {localStorage.getItem("adminName")}</span>
                     <button onClick={handleLogout}
+                        aria-label="Logout"
                         style={{ background: "#dc2626", color: "white", border: "none", padding: "8px 15px", borderRadius: "6px", cursor: "pointer" }}>
                         Logout
                     </button>
@@ -147,17 +139,17 @@ export default function Contacts() {
 
             <div style={{ padding: "30px" }}>
 
-                {/* Title */}
+                {/* Title - ✅ h3 not h2 */}
                 <div style={{ marginBottom: "20px" }}>
-                    <h3 style={{ margin: 0 }}>
+                    <h3 style={{ margin: 0, fontSize: "24px" }}>
                         Contact Messages
                         {pagination.totalContacts > 0 && (
-                            <span style={{ fontSize: "14px", color: "gray", fontWeight: "normal", marginLeft: "10px" }}>
+                            <span style={{ fontSize: "14px", color: "#555", fontWeight: "normal", marginLeft: "10px" }}>
                                 ({pagination.totalContacts} total)
                             </span>
                         )}
                     </h3>
-                    <p style={{ color: "gray", fontSize: "11px", margin: "5px 0 0" }}>
+                    <p style={{ color: "#555", fontSize: "11px", margin: "5px 0 0" }}>
                         🔗 {window.location.href}
                     </p>
                 </div>
@@ -174,37 +166,33 @@ export default function Contacts() {
                 {/* Contact List */}
                 {!loading && contacts.map(contact => (
                     <div key={contact._id} style={{
-                        background: "white",
-                        border: "1px solid #ddd",
-                        padding: "20px",
-                        marginBottom: "10px",
-                        borderRadius: "8px",
+                        background: "white", border: "1px solid #ddd", padding: "20px",
+                        marginBottom: "10px", borderRadius: "8px",
                         borderLeft: "4px solid #0a7c6e"
                     }}>
                         <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "10px" }}>
                             <div style={{ flex: 1 }}>
-                                <h4 style={{ margin: "0 0 5px" }}>{contact.name}</h4>
-                                <p style={{ margin: "0 0 5px", fontSize: "13px" }}>📧 {contact.email}</p>
-                                <p style={{ margin: "0 0 8px", fontWeight: "600" }}>📌 {contact.subject}</p>
-                                <p style={{ margin: "0 0 8px", fontSize: "13px", color: "gray" }}>{contact.message}</p>
+                                {/* ✅ h3 for correct heading order */}
+                                <h3 style={{ margin: "0 0 5px", fontSize: "16px", fontWeight: "700" }}>{contact.name}</h3>
+                                <p style={{ margin: "0 0 5px", fontSize: "13px", color: "#333" }}>📧 {contact.email}</p>
+                                <p style={{ margin: "0 0 8px", fontWeight: "600", color: "#333" }}>📌 {contact.subject}</p>
+                                <p style={{ margin: "0 0 8px", fontSize: "13px", color: "#555" }}>{contact.message}</p>
                                 {contact.autoReply && (
                                     <div style={{
-                                        background: "#f0fdf4",
-                                        border: "1px solid #86efac",
-                                        padding: "10px",
-                                        borderRadius: "6px",
-                                        fontSize: "12px",
-                                        color: "#166534"
+                                        background: "#f0fdf4", border: "1px solid #86efac",
+                                        padding: "10px", borderRadius: "6px",
+                                        fontSize: "12px", color: "#166534"
                                     }}>
                                         <strong>Auto Reply:</strong> {contact.autoReply}
                                     </div>
                                 )}
-                                <p style={{ margin: "8px 0 0", fontSize: "11px", color: "#999" }}>
+                                <p style={{ margin: "8px 0 0", fontSize: "11px", color: "#666" }}>
                                     Received: {new Date(contact.createdAt).toLocaleDateString()}
                                 </p>
                             </div>
                             <div>
                                 <button onClick={() => handleDelete(contact._id)}
+                                    aria-label={`Delete message from ${contact.name}`}
                                     style={{ padding: "6px 10px", background: "#fee2e2", color: "#dc2626", border: "1px solid #fca5a5", borderRadius: "6px", cursor: "pointer", fontSize: "13px" }}>
                                     🗑 Delete
                                 </button>
@@ -215,9 +203,9 @@ export default function Contacts() {
 
                 {/* No results */}
                 {!loading && contacts.length === 0 && (
-                    <div style={{ textAlign: "center", padding: "40px", color: "gray", background: "white", borderRadius: "8px" }}>
+                    <div style={{ textAlign: "center", padding: "40px", color: "#555", background: "white", borderRadius: "8px" }}>
                         <p style={{ fontSize: "40px", margin: "0 0 10px" }}>📭</p>
-                        <p style={{ fontSize: "16px", fontWeight: "500" }}>No messages found</p>
+                        <p style={{ fontSize: "16px", fontWeight: "500", color: "#333" }}>No messages found</p>
                     </div>
                 )}
 
@@ -225,16 +213,19 @@ export default function Contacts() {
                 {pagination.totalPages > 1 && (
                     <div style={{ display: "flex", gap: "8px", marginTop: "20px", flexWrap: "wrap" }}>
                         <button onClick={() => setFilter("page", page - 1)} disabled={page === 1}
+                            aria-label="Previous page"
                             style={{ padding: "8px 15px", borderRadius: "6px", border: "1px solid #ddd", cursor: page === 1 ? "not-allowed" : "pointer", background: page === 1 ? "#f0f0f0" : "white" }}>
                             Previous
                         </button>
                         {[...Array(pagination.totalPages)].map((_, i) => (
                             <button key={i} onClick={() => setFilter("page", i + 1)}
+                                aria-label={`Go to page ${i + 1}`}
                                 style={{ padding: "8px 12px", borderRadius: "6px", border: "1px solid #0a7c6e", background: page === i + 1 ? "#0a7c6e" : "white", color: page === i + 1 ? "white" : "#0a7c6e", cursor: "pointer" }}>
                                 {i + 1}
                             </button>
                         ))}
                         <button onClick={() => setFilter("page", page + 1)} disabled={page === pagination.totalPages}
+                            aria-label="Next page"
                             style={{ padding: "8px 15px", borderRadius: "6px", border: "1px solid #ddd", cursor: page === pagination.totalPages ? "not-allowed" : "pointer", background: page === pagination.totalPages ? "#f0f0f0" : "white" }}>
                             Next
                         </button>
@@ -242,7 +233,7 @@ export default function Contacts() {
                 )}
 
                 {pagination.totalContacts > 0 && (
-                    <p style={{ color: "gray", fontSize: "13px", marginTop: "10px" }}>
+                    <p style={{ color: "#555", fontSize: "13px", marginTop: "10px" }}>
                         Showing page {pagination.currentPage} of {pagination.totalPages} ({pagination.totalContacts} total)
                     </p>
                 )}

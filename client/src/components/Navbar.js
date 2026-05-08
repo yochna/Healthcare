@@ -22,32 +22,49 @@ const Navbar = ({ activeTab, setActiveTab }) => {
   return (
     <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
       <div className="nav-inner">
-        <div className="nav-brand" onClick={() => setActiveTab('home')}>
+        <div
+          className="nav-brand"
+          onClick={() => setActiveTab('home')}
+          role="button"
+          aria-label="Go to home"
+          tabIndex={0}
+        >
           <Heart size={22} fill="#0a7c6e" color="#0a7c6e" />
           <span className="brand-name">Health<span>Bridge</span></span>
         </div>
 
-      <button
-    className="hamburger"
-    onClick={() => setMenuOpen(!menuOpen)}
-    aria-label={menuOpen ? "Close menu" : "Open menu"}
->
-    {menuOpen ? <X size={22} /> : <Menu size={22} />}
-</button>
+        <button
+          className="hamburger"
+          onClick={() => setMenuOpen(!menuOpen)}
+          aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
+          aria-expanded={menuOpen}
+          aria-controls="nav-links"
+        >
+          {menuOpen ? <X size={22} /> : <Menu size={22} />}
+        </button>
 
-        <ul className={`nav-links ${menuOpen ? 'open' : ''}`}>
+        <ul
+          id="nav-links"
+          className={`nav-links ${menuOpen ? 'open' : ''}`}
+        >
           {navItems.map(item => (
             <li key={item.id}>
               <button
                 className={`nav-btn ${activeTab === item.id ? 'active' : ''}`}
                 onClick={() => { setActiveTab(item.id); setMenuOpen(false); }}
+                aria-label={`Go to ${item.label}`}
+                aria-current={activeTab === item.id ? 'page' : undefined}
               >
                 {item.label}
               </button>
             </li>
           ))}
           <li>
-            <button className="nav-cta" onClick={() => { setActiveTab('patient'); setMenuOpen(false); }}>
+            <button
+              className="nav-cta"
+              onClick={() => { setActiveTab('patient'); setMenuOpen(false); }}
+              aria-label="Get Help - Request Patient Support"
+            >
               Get Help
             </button>
           </li>

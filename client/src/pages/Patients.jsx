@@ -261,7 +261,8 @@ export default function Patients() {
                     }}>
                         <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "10px" }}>
                             <div>
-                                <h4 style={{ margin: "0 0 5px" }}>{patient.name} — Age {patient.age}</h4>
+                                {/* ✅ FIXED: Correct semantic order (h3 after h2) with original styling */}
+                                <h3 style={{ margin: "0 0 5px", fontSize: "16px", fontWeight: "700" }}>{patient.name} — Age {patient.age}</h3>
                                 <p style={{ margin: "0 0 5px", color: "#555" }}>{patient.condition}</p>
                                 <p style={{ margin: "0 0 5px", fontSize: "13px", color: "#333" }}>
                                     📧 {patient.email} | 📱 {patient.phone}

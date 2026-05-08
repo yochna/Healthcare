@@ -105,11 +105,10 @@
   transform: translateY(-2px);
 }
 
-/* ✅ Fixed: white color on dark background for better contrast */
 .btn-outline {
   background: transparent;
   color: white;
-  border: 2px solid white;    /* ✅ was rgba(255,255,255,0.5) → now solid white */
+  border: 2px solid white;
   padding: 13px 28px;
   border-radius: 50px;
   font-size: 15px;
@@ -167,9 +166,9 @@
 .card-2 { top: 50%; right: 0; transform: translateY(-50%); animation-delay: 1.3s; }
 .card-3 { bottom: 20px; left: 40px; animation-delay: 0.7s; }
 
-/* Stats */
+/* Stats - ✅ FIXED: Darker background for contrast */
 .stats-section {
-  background: var(--teal);
+  background: #065f52; 
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   max-width: 100%;
@@ -180,12 +179,11 @@
   font-family: 'Playfair Display', serif;
   font-size: 40px;
   font-weight: 700;
-  color: white;
+  color: #ffffff;
 }
-/* ✅ Fixed: was rgba(255,255,255,0.7) → now white for better contrast */
 .stat-label {
   font-size: 13px;
-  color: white;
+  color: #ffffff;
   margin-top: 4px;
   font-weight: 600;
   letter-spacing: 0.5px;
@@ -253,8 +251,8 @@
 }
 .cta-inner h2 { font-size: 32px; color: white; margin-bottom: 8px; }
 
-/* ✅ Fixed: was rgba(255,255,255,0.65) → now 0.9 for better contrast */
-.cta-inner p { color: rgba(255,255,255,0.9); font-size: 15px; }
+/* ✅ FIXED: Increased opacity to 0.95 for maximum readability */
+.cta-inner p { color: rgba(255,255,255,0.95); font-size: 15px; }
 
 .cta-buttons { display: flex; gap: 12px; flex-shrink: 0; }
 
