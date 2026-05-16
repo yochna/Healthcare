@@ -207,6 +207,16 @@ Full interactive Swagger docs:
 | Request Size | express.json({ limit: "10kb" }) | Prevents payload attacks |
 | CORS | cors (production origin) | Restricts API to known frontend |
 
+
+
+## 📊 Lighthouse Scores
+
+![Lighthouse Scores](./assets/lighthouse.png)
+
+| Metric | Score |
+|---|---|
+| Performance | 98 ✅ |
+| Accessibility | 94 ✅ |
 ---
 
 ## 🚀 Running Locally
